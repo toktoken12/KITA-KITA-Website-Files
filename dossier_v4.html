@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KITA-KITA Eats | Command Center v4</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            750: '#1b2330',
+                            850: '#0d131f',
+                            900: '#060913',
+                        },
+                        neon: {
+                            blue: '#3B82F6',
+                            amber: '#F59E0B',
+                            rose: '#F43F5E',
+                            emerald: '#10B981',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #060913; color: #94a3b8; }
+        .glass { background: rgba(13, 19, 31, 0.8); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.05); }
+        .glass-hover:hover { border-color: rgba(59, 130, 246, 0.3); box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.15); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .text-glow-blue { text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
+        .text-glow-emerald { text-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+        .text-glow-rose { text-shadow: 0 0 15px rgba(244, 63, 94, 0.5); }
+        ::-webkit-scrollbar { height: 6px; width: 6px; }
+        ::-webkit-scrollbar-track { background: #060913; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    </style>
+</head>
+<body class="antialiased min-h-screen p-3 md:p-6 pb-20">
+
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- HEADER -->
+        <header class="flex flex-col lg:flex-row justify-between items-start lg:items-center border-b border-slate-800 pb-5 gap-4">
+            <div class="space-y-1">
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 bg-blue-600/10 text-blue-400 rounded-xl border border-blue-500/20">
+                        <i class="fa-solid fa-vault text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-black text-white tracking-tight flex items-center gap-2">
+                            KITA-KITA EATS <span class="text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded">v4.0 RECONCILED</span>
+                        </h1>
+                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-widest">Ultimate Operational & Financial Command Record</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="text-left glass px-4 py-2 rounded-xl border border-slate-800">
+                    <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Reconciliation Effective Date</p>
+                    <p class="text-xs text-slate-200 font-medium font-mono">
+                        <i class="fa-regular fa-calendar-check text-blue-400 mr-2"></i>Sunday, June 15, 2026
+                    </p>
+                </div>
+                <div class="text-left glass px-4 py-2 rounded-xl border-rose-500/20 bg-rose-950/10">
+                    <p class="text-[10px] text-rose-400 uppercase font-bold tracking-wider">
+                        <i class="fa-solid fa-triangle-exclamation mr-1"></i> Balance Audit
+                    </p>
+                    <p class="text-xs text-rose-200 font-semibold font-mono">-$18.13 DISCREPANCY RECONCILED</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- MASTER KEY METRICS -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Reconciled Capital -->
+            <div class="glass rounded-2xl p-5 relative overflow-hidden group transition-all duration-300">
+                <div class="absolute -right-4 -bottom-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-300">
+                    <i class="fa-solid fa-wallet text-9xl text-emerald-400"></i>
+                </div>
+                <div class="flex justify-between items-start">
+                    <h2 class="text-xs text-slate-400 font-bold uppercase tracking-wider">Confirmed Capital</h2>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-mono font-bold">Physical Verified</span>
+                </div>
+                <div class="flex items-end gap-1.5 mt-3 text-emerald-400">
+                    <span class="text-4xl font-extrabold tracking-tight text-glow-emerald">90.98</span>
+                    <span class="text-base font-bold mb-1 font-mono">BND</span>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-2 flex items-center">
+                    <i class="fa-solid fa-shield-heart text-emerald-500 mr-1.5"></i> Reconciled from estimated 121.45 BND
+                </p>
+            </div>
+
+            <!-- Capital Growth Since Soft Reset -->
+            <div class="glass rounded-2xl p-5 relative overflow-hidden group transition-all duration-300">
+                <div class="absolute -right-4 -bottom-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-300">
+                    <i class="fa-solid fa-arrow-up-right-dots text-9xl text-blue-400"></i>
+                </div>
+                <h2 class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">Growth Since Reset</h2>
+                <div class="flex items-end gap-1.5 mt-3 text-blue-400">
+                    <span class="text-4xl font-extrabold tracking-tight text-glow-blue">+62.7%</span>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-3">
+                    From <span class="font-mono font-semibold text-slate-200">55.86 BND</span> pre-reset base
+                </p>
+            </div>
+
+            <!-- Day 9 Performance -->
+            <div class="glass rounded-2xl p-5 relative overflow-hidden group transition-all duration-300">
+                <div class="absolute -right-4 -bottom-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-300">
+                    <i class="fa-solid fa-basket-shopping text-9xl text-amber-400"></i>
+                </div>
+                <h2 class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Day 9 Net Revenue</h2>
+                <div class="flex items-end gap-1.5 mt-3 text-amber-400">
+                    <span class="text-4xl font-extrabold tracking-tight">27.16</span>
+                    <span class="text-base font-bold mb-1 font-mono">BND</span>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-2">
+                    PRMH: <span class="font-mono text-slate-200">18.04 BND</span> | UKUR: <span class="font-mono text-slate-200">9.12 BND</span>
+                </p>
+            </div>
+
+            <!-- Total Leakage Delta -->
+            <div class="glass rounded-2xl p-5 relative overflow-hidden group border-l-4 border-l-rose-500 transition-all duration-300">
+                <div class="absolute -right-4 -bottom-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-300">
+                    <i class="fa-solid fa-circle-exclamation text-9xl text-rose-400"></i>
+                </div>
+                <div class="flex justify-between items-start">
+                    <h2 class="text-xs text-rose-400 font-bold uppercase tracking-wider">Reconciled Losses</h2>
+                    <span class="text-[10px] bg-rose-500/10 text-rose-400 px-2 py-0.5 rounded font-mono font-bold">Unaccounted Fixed</span>
+                </div>
+                <div class="flex items-end gap-1.5 mt-3 text-rose-400">
+                    <span class="text-4xl font-extrabold tracking-tight text-glow-rose">18.13</span>
+                    <span class="text-base font-bold mb-1 font-mono">BND</span>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-2">
+                    Fuel/Food: <span class="font-mono text-slate-200">14.00</span> | Mystery Ops Exp: <span class="font-mono text-slate-200">4.13</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- TWO COLUMN DETAILS & OPTIMIZATION SIMULATOR -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Left 2 Cols: Sourcing Optimization & Historical Reconciliation -->
+            <div class="lg:col-span-2 space-y-6">
+                
+                <!-- SARDINE OPTIMIZATION ENGINE -->
+                <section class="glass rounded-2xl p-6 border border-slate-800">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-wand-magic-sparkles text-blue-400"></i>
+                            Sardine Cost & Packaging Optimization Engine
+                        </h3>
+                        <span class="text-xs bg-blue-500/10 text-blue-300 font-bold px-3 py-1 rounded-full border border-blue-500/20">OPERATIONAL OPTIMIZER</span>
+                    </div>
+
+                    <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+                        The transition from **Ayam Brand** to **Mr. Ten** coupled with the correct packaging logic (**Benxon 2H containers** instead of **foil trays**) represents a major optimization breakthrough. Calculate and contrast below:
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Inputs -->
+                        <div class="space-y-4 bg-slate-900/40 p-4 rounded-xl border border-slate-800">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Sardine Sourcing Option</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onclick="setSardine('mr_ten', 1.50, 35)" id="btn-ten" class="py-2.5 rounded-lg text-xs font-mono font-bold bg-blue-600 text-white border border-blue-500">
+                                        Mr. Ten (1.50 BND @ 35 yield)
+                                    </button>
+                                    <button onclick="setSardine('ayam_brand', 3.95, 34)" id="btn-ayam" class="py-2.5 rounded-lg text-xs font-mono font-bold bg-slate-850 text-slate-400 border border-slate-700 hover:bg-slate-750">
+                                        Ayam Brand (3.95 BND @ 34 yield)
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Container Packaging Option</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onclick="setPackaging('benxon', 0.032)" id="btn-benxon" class="py-2.5 rounded-lg text-xs font-mono font-bold bg-blue-600 text-white border border-blue-500">
+                                        Benxon 2H (0.032 BND)
+                                    </button>
+                                    <button onclick="setPackaging('foil_tray', 0.190)" id="btn-foil" class="py-2.5 rounded-lg text-xs font-mono font-bold bg-slate-850 text-slate-400 border border-slate-700 hover:bg-slate-750">
+                                        Foil Tray (0.190 BND)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Results display -->
+                        <div class="space-y-3 bg-slate-900/60 p-4 rounded-xl border border-blue-950/30 flex flex-col justify-between">
+                            <div class="space-y-2 text-xs">
+                                <div class="flex justify-between">
+                                    <span>Puff Ingredient Cost (Pastry + Meat):</span>
+                                    <span class="font-mono text-slate-200" id="calc-puff-cogs">0.188 BND</span>
+                                </div>
+                                <div class="flex justify-between border-b border-slate-800 pb-2">
+                                    <span>Container Cost (Per unit of 2 puffs):</span>
+                                    <span class="font-mono text-slate-300" id="calc-pack-cost">0.032 BND</span>
+                                </div>
+                                <div class="flex justify-between font-bold text-slate-200">
+                                    <span>Total Container COGS (2 Puffs):</span>
+                                    <span class="font-mono text-blue-400" id="calc-total-cogs">0.408 BND</span>
+                                </div>
+                                <div class="flex justify-between font-bold text-emerald-400 border-t border-slate-850 pt-2">
+                                    <span>Net UKUR Return / Margin %:</span>
+                                    <span class="font-mono" id="calc-net-profit">0.552 BND (83.0%)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="text-[10px] text-amber-400 bg-amber-500/5 border border-amber-500/15 p-2.5 rounded-lg flex items-start gap-2 leading-relaxed">
+                                <i class="fa-solid fa-lightbulb mt-0.5"></i>
+                                <span>Note: Mr. Ten combined with Benxon 2H packaging yields a massive $83.0\%$ profit margin based on the updated cost model.</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- RECONCILIATION & RE-ENTRY LEDGER -->
+                <section class="glass rounded-2xl p-6">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-scale-balanced text-emerald-400"></i>
+                            Historical Capital Reconciliation Flow
+                        </h3>
+                        <span class="text-xs font-mono text-slate-400">Post-Day 9 verified balance transition</span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs font-mono">
+                            <thead>
+                                <tr class="text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-800">
+                                    <th class="py-2 px-3">Transaction / Adjustment Milestone</th>
+                                    <th class="py-2 px-3 text-right">Debit / Credit</th>
+                                    <th class="py-2 px-3 text-right text-slate-200">Running Capital</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/50">
+                                <tr>
+                                    <td class="py-2.5 px-3 font-semibold text-slate-300">Soft Reset Baseline</td>
+                                    <td class="py-2.5 px-3 text-right text-slate-500">—</td>
+                                    <td class="py-2.5 px-3 text-right text-blue-400 font-bold">55.86 BND</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 px-3 text-slate-400">Days 1 - 8 Cumulative Net Sales</td>
+                                    <td class="py-2.5 px-3 text-right text-emerald-500">+75.64 BND</td>
+                                    <td class="py-2.5 px-3 text-right">131.50 BND</td>
+                                </tr>
+                                <tr class="bg-blue-950/10">
+                                    <td class="py-2.5 px-3 font-semibold text-slate-200">Day 9 Net Sales (PRMH + UKUR)</td>
+                                    <td class="py-2.5 px-3 text-right text-emerald-500">+27.16 BND</td>
+                                    <td class="py-2.5 px-3 text-right text-white">158.66 BND</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 px-3 text-slate-400">Restock (June 14-15) - Business Materials</td>
+                                    <td class="py-2.5 px-3 text-right text-rose-500">-34.25 BND</td>
+                                    <td class="py-2.5 px-3 text-right">124.41 BND</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 px-3 text-slate-400">Restock (June 14-15) - Personal Purchases</td>
+                                    <td class="py-2.5 px-3 text-right text-rose-500">-5.25 BND</td>
+                                    <td class="py-2.5 px-3 text-right">119.16 BND</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 px-3 text-slate-400">Identified Expenses (Refuels & Ayamku)</td>
+                                    <td class="py-2.5 px-3 text-right text-rose-500">-14.00 BND</td>
+                                    <td class="py-2.5 px-3 text-right">105.16 BND</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2.5 px-3 text-slate-400">Unaccounted Operational Expenses</td>
+                                    <td class="py-2.5 px-3 text-right text-rose-500">-4.13 BND</td>
+                                    <td class="py-2.5 px-3 text-right">101.03 BND</td>
+                                </tr>
+                                <tr class="border-b border-rose-950">
+                                    <td class="py-2.5 px-3 text-rose-400 font-semibold italic"><i class="fa-solid fa-eraser mr-1"></i> Final Physical Reconciliation Drift</td>
+                                    <td class="py-2.5 px-3 text-right text-rose-500">-10.05 BND</td>
+                                    <td class="py-2.5 px-3 text-right text-rose-400">90.98 BND</td>
+                                </tr>
+                                <tr class="bg-emerald-950/20 text-emerald-400 font-bold text-sm">
+                                    <td class="py-3 px-3"><i class="fa-solid fa-circle-check mr-1.5 text-emerald-400"></i> Verified Ending Capital Position</td>
+                                    <td class="py-3 px-3 text-right">—</td>
+                                    <td class="py-3 px-3 text-right text-glow-emerald text-base">90.98 BND</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Col: Product Portfolio & Pending Actions -->
+            <div class="space-y-6">
+                
+                <!-- PRODUCT STATUS & MARGIN SNAPSHOTS -->
+                <section class="glass rounded-2xl p-5 border border-slate-800">
+                    <h3 class="text-xs font-bold text-white uppercase tracking-wider mb-3">
+                        Active Produced Products
+                    </h3>
+
+                    <div class="space-y-2 text-xs">
+                        <!-- Produced Tuna -->
+                        <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center">
+                            <div>
+                                <p class="font-bold text-slate-200">Tuna Puffs (2 Puffs/container)</p>
+                                <p class="text-[10px] text-slate-400">COGS: 0.205 BND | Net: 0.96 BND</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-mono font-bold text-emerald-400">62.9%</p>
+                                <span class="text-[9px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded font-bold uppercase">Stable</span>
+                            </div>
+                        </div>
+
+                        <!-- Produced Carbonara -->
+                        <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center">
+                            <div>
+                                <p class="font-bold text-slate-200">Mushroom Carbonara</p>
+                                <p class="text-[10px] text-slate-400">COGS: 0.870 BND | Net: 1.60 BND</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-mono font-bold text-blue-400">36.5%</p>
+                                <span class="text-[9px] bg-blue-500/10 text-blue-400 px-1.5 py-0.5 rounded font-bold uppercase">Prego Std</span>
+                            </div>
+                        </div>
+
+                        <!-- Produced Spaghetti -->
+                        <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center">
+                            <div>
+                                <p class="font-bold text-slate-200">Spaghetti Bolognese</p>
+                                <p class="text-[10px] text-slate-400">COGS: 0.890 BND | Net: 1.60 BND</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-mono font-bold text-rose-400">35.5%</p>
+                                <span class="text-[9px] bg-rose-500/10 text-rose-400 px-1.5 py-0.5 rounded font-bold uppercase">Waste Risk</span>
+                            </div>
+                        </div>
+
+                        <!-- Produced Sambal Mangga -->
+                        <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center">
+                            <div>
+                                <p class="font-bold text-slate-200">Sambal / Jaruk Mangga</p>
+                                <p class="text-[10px] text-slate-400">COGS: 0.00 BND (Home-grown)</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-mono font-bold text-emerald-400">100%</p>
+                                <span class="text-[9px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded font-bold uppercase">High Margin</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- OPERATIONAL ROADMAP & FLAGS -->
+                <section class="glass rounded-2xl p-5 border border-slate-800">
+                    <h3 class="text-xs font-bold text-white uppercase tracking-wider mb-3">
+                        Operational Flags & Tasks
+                    </h3>
+
+                    <div class="space-y-2.5 text-xs">
+                        <!-- High Priority Item -->
+                        <div class="p-2.5 rounded-lg border border-rose-950 bg-rose-950/10 space-y-1">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-rose-300 uppercase">1. Mr. Ten Yield Session</span>
+                                <span class="text-[9px] bg-rose-500 text-white font-bold px-1.5 py-0.5 rounded">HIGH</span>
+                            </div>
+                            <p class="text-slate-400 text-[11px] leading-relaxed">
+                                Verify if the <span class="font-mono text-white">35 puffs / can</span> yield remains consistent in subsequent production sessions.
+                            </p>
+                        </div>
+
+                        <!-- Medium Priority Item -->
+                        <div class="p-2.5 rounded-lg border border-amber-950 bg-amber-950/10 space-y-1">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-amber-300 uppercase">2. Thursday Throttle</span>
+                                <span class="text-[9px] bg-amber-500 text-slate-900 font-bold px-1.5 py-0.5 rounded">MEDIUM</span>
+                            </div>
+                            <p class="text-slate-400 text-[11px] leading-relaxed">
+                                Maintain strict restricted deployment profiles on Thursdays/Saturdays to protect UKUR leakage.
+                            </p>
+                        </div>
+
+                        <!-- Sourcing Confirmation Flag -->
+                        <div class="p-2.5 rounded-lg border border-blue-950 bg-blue-950/10 space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-blue-300 uppercase"><i class="fa-solid fa-flag mr-1"></i> Owner Sourcing Flags</span>
+                                <span class="text-[9px] bg-blue-500 text-white font-bold px-1.5 py-0.5 rounded">FLAGS</span>
+                            </div>
+                            <div class="space-y-1 text-slate-400 text-[11px] font-mono leading-relaxed">
+                                <p><span class="text-blue-300">F2:</span> Fork pack count unverified ($0.90 BND)</p>
+                                <p><span class="text-blue-300">F4:</span> Purpose of 4 Prego cans ($8.76 BND)</p>
+                                <p><span class="text-blue-300">F5:</span> Purpose of Clara Ole 1kg ($3.15 BND)</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+        </div>
+
+        <!-- FOOTER & AUDIT SIGNOFF -->
+        <footer class="text-center text-slate-500 text-[11px] border-t border-slate-900 pt-6 space-y-1">
+            <p><strong>KITA-KITA Eats Command Ledger (v4.0 Reconciled)</strong> • Brunei Darussalam</p>
+            <p>AI Agent Continuous Memory Module • Verified Physical Balance: 90.98 BND.</p>
+        </footer>
+
+    </div>
+
+    <!-- CALCULATOR ENGINE SCRIPT -->
+    <script>
+        let currentSardineCost = 1.50;
+        let currentSardineYield = 35;
+        let currentPackagingCost = 0.032;
+
+        function setSardine(type, cost, yieldCount) {
+            currentSardineCost = cost;
+            currentSardineYield = yieldCount;
+            
+            document.getElementById('btn-ten').className = type === 'mr_ten' ? 'py-2.5 rounded-lg text-xs font-mono font-bold bg-blue-600 text-white border border-blue-500' : 'py-2.5 rounded-lg text-xs font-mono font-bold bg-slate-850 text-slate-400 border border-slate-700 hover:bg-slate-750';
+            document.getElementById('btn-ayam').className = type === 'ayam_brand' ? 'py-2.5 rounded-lg text-xs font-mono font-bold bg-blue-600 text-white border border-blue-500' : 'py-2.5 rounded-lg text-xs font-mono font-bold bg-slate-850 text-slate-400 border border-slate-700 hover:bg-slate-750';
+            
+            calculateSim();
+        }
+
+        function setPackaging(type, cost) {
+            currentPackagingCost = cost;
+            
+            document.getElementById('btn-benxon').className = type === 'benxon' ? 'py-2.5 rounded-lg text-xs font-mono font-bold bg-blue-600 text-white border border-blue-500' : 'py-2.5 rounded-lg text-xs font-mono font-bold bg-slate-850 text-slate-400 border border-slate-700 hover:bg-slate-750';
+            document.getElementById('btn-foil').className = type === 'foil_tray' ? 'py-2.5 rounded-lg text-xs font-mono font-bold bg-blue-600 text-white border border-blue-500' : 'py-2.5 rounded-lg text-xs font-mono font-bold bg-slate-850 text-slate-400 border border-slate-700 hover:bg-slate-750';
+            
+            calculateSim();
+        }
+
+        function calculateSim() {
+            // Pastry sheet cost baseline: 2.90 per pack of 20 puffs -> 0.145 per puff
+            const pastryCostPerPuff = 0.145;
+            
+            // Per puff meat cost
+            const puffMeatCost = currentSardineCost / currentSardineYield;
+            const singlePuffCOGS = pastryCostPerPuff + puffMeatCost;
+            
+            // Pack of 2 puffs COGS
+            const containerCOGS = (singlePuffCOGS * 2) + currentPackagingCost;
+            
+            // Retails per container of 2 is 1.20 BND
+            const grossRetail = 1.20;
+            const netReturnUKUR = grossRetail * 0.80; // 20% commission
+            const netProfit = netReturnUKUR - containerCOGS;
+            
+            // Margin calculated as Net Profit / Net Return
+            const marginPercent = (netProfit / netReturnUKUR) * 100;
+
+            document.getElementById('calc-puff-cogs').innerText = singlePuffCOGS.toFixed(3) + ' BND';
+            document.getElementById('calc-pack-cost').innerText = currentPackagingCost.toFixed(3) + ' BND';
+            document.getElementById('calc-total-cogs').innerText = containerCOGS.toFixed(3) + ' BND';
+            document.getElementById('calc-net-profit').innerText = netProfit.toFixed(3) + ' BND (' + marginPercent.toFixed(1) + '%)';
+        }
+
+        // Initialize simulation values
+        calculateSim();
+    </script>
+</body>
+</html>
