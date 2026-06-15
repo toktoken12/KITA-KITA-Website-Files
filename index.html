@@ -1,471 +1,982 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KITA-KITA Eats | Command Center v4</title>
+    <title>KITA-KITA Eats - Professional Financial Projection Dashboard</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    colors: {
-                        slate: {
-                            750: '#1b2330',
-                            850: '#0d131f',
-                            900: '#060913',
-                        },
-                        neon: {
-                            blue: '#3B82F6',
-                            amber: '#F59E0B',
-                            rose: '#F43F5E',
-                            emerald: '#10B981',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #060913; color: #94a3b8; }
-        .glass { background: rgba(13, 19, 31, 0.8); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.05); }
-        .glass-hover:hover { border-color: rgba(59, 130, 246, 0.3); box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.15); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .text-glow-blue { text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
-        .text-glow-emerald { text-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
-        .text-glow-rose { text-shadow: 0 0 15px rgba(244, 63, 94, 0.5); }
-        ::-webkit-scrollbar { height: 6px; width: 6px; }
-        ::-webkit-scrollbar-track { background: #060913; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 9999px; }
-        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+        /* Smooth transitions for interactive elements */
+        .transition-all {
+            transition: all 0.3s ease-in-out;
+        }
+        /* Custom scrollbar for slate theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #020617;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
     </style>
 </head>
-<body class="antialiased min-h-screen p-3 md:p-6 pb-20">
+<body class="bg-slate-900 text-slate-100 min-h-screen font-sans">
 
-    <div class="max-w-7xl mx-auto space-y-6">
-        
-        <!-- HEADER -->
-        <header class="flex flex-col lg:flex-row justify-between items-start lg:items-center border-b border-slate-800 pb-5 gap-4">
-            <div class="space-y-1">
-                <div class="flex items-center gap-3">
-                    <div class="p-2.5 bg-blue-600/10 text-blue-400 rounded-xl border border-blue-500/20">
-                        <i class="fa-solid fa-vault text-2xl"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-black text-white tracking-tight flex items-center gap-2">
-                            KITA-KITA EATS <span class="text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded">v4.0 RECONCILED</span>
-                        </h1>
-                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-widest">Ultimate Operational & Financial Command Record</p>
-                    </div>
+    <!-- Header Section -->
+    <header class="border-b border-slate-800 bg-slate-950/50 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-emerald-500/10 rounded-lg border border-emerald-500/30">
+                    <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight text-white">KITA-KITA EATS</h1>
+                    <p class="text-xs text-slate-400">Master Dossier v4 Financial Intelligence Unit</p>
                 </div>
             </div>
-            
-            <div class="flex flex-wrap items-center gap-3">
-                <div class="text-left glass px-4 py-2 rounded-xl border border-slate-800">
-                    <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Reconciliation Effective Date</p>
-                    <p class="text-xs text-slate-200 font-medium font-mono">
-                        <i class="fa-regular fa-calendar-check text-blue-400 mr-2"></i>Sunday, June 15, 2026
-                    </p>
-                </div>
-                <div class="text-left glass px-4 py-2 rounded-xl border-rose-500/20 bg-rose-950/10">
-                    <p class="text-[10px] text-rose-400 uppercase font-bold tracking-wider">
-                        <i class="fa-solid fa-triangle-exclamation mr-1"></i> Balance Audit
-                    </p>
-                    <p class="text-xs text-rose-200 font-semibold font-mono">-$18.13 DISCREPANCY RECONCILED</p>
-                </div>
+            <div class="flex items-center gap-4 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300">
+                    Effective: June 15, 2026 (End of Day 9)
+                </span>
+                <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-semibold animate-pulse">
+                    Proportional Engine Active
+                </span>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- MASTER KEY METRICS -->
+    <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+
+        <!-- SECTION 1: KEY PERFORMANCE INDICATORS -->
         <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <!-- Reconciled Capital -->
-            <div class="glass rounded-2xl p-5 relative overflow-hidden group transition-all duration-300">
-                <div class="absolute -right-4 -bottom-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-300">
-                    <i class="fa-solid fa-wallet text-9xl text-emerald-400"></i>
-                </div>
+            
+            <!-- Capital & Growth -->
+            <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 flex flex-col justify-between">
                 <div class="flex justify-between items-start">
-                    <h2 class="text-xs text-slate-400 font-bold uppercase tracking-wider">Confirmed Capital</h2>
-                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-mono font-bold">Physical Verified</span>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Verified Capital</span>
+                    <span class="px-2 py-0.5 text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-md">+62.7%</span>
                 </div>
-                <div class="flex items-end gap-1.5 mt-3 text-emerald-400">
-                    <span class="text-4xl font-extrabold tracking-tight text-glow-emerald">90.98</span>
-                    <span class="text-base font-bold mb-1 font-mono">BND</span>
+                <div class="mt-4">
+                    <span class="text-3xl font-bold text-white">90.98 BND</span>
+                    <p class="text-xs text-slate-500 mt-1">Starting Capital: 55.86 BND (Soft Reset)</p>
                 </div>
-                <p class="text-[11px] text-slate-400 mt-2 flex items-center">
-                    <i class="fa-solid fa-shield-heart text-emerald-500 mr-1.5"></i> Reconciled from estimated 121.45 BND
-                </p>
             </div>
 
-            <!-- Capital Growth Since Soft Reset -->
-            <div class="glass rounded-2xl p-5 relative overflow-hidden group transition-all duration-300">
-                <div class="absolute -right-4 -bottom-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-300">
-                    <i class="fa-solid fa-arrow-up-right-dots text-9xl text-blue-400"></i>
-                </div>
-                <h2 class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">Growth Since Reset</h2>
-                <div class="flex items-end gap-1.5 mt-3 text-blue-400">
-                    <span class="text-4xl font-extrabold tracking-tight text-glow-blue">+62.7%</span>
-                </div>
-                <p class="text-[11px] text-slate-400 mt-3">
-                    From <span class="font-mono font-semibold text-slate-200">55.86 BND</span> pre-reset base
-                </p>
-            </div>
-
-            <!-- Day 9 Performance -->
-            <div class="glass rounded-2xl p-5 relative overflow-hidden group transition-all duration-300">
-                <div class="absolute -right-4 -bottom-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-300">
-                    <i class="fa-solid fa-basket-shopping text-9xl text-amber-400"></i>
-                </div>
-                <h2 class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Day 9 Net Revenue</h2>
-                <div class="flex items-end gap-1.5 mt-3 text-amber-400">
-                    <span class="text-4xl font-extrabold tracking-tight">27.16</span>
-                    <span class="text-base font-bold mb-1 font-mono">BND</span>
-                </div>
-                <p class="text-[11px] text-slate-400 mt-2">
-                    PRMH: <span class="font-mono text-slate-200">18.04 BND</span> | UKUR: <span class="font-mono text-slate-200">9.12 BND</span>
-                </p>
-            </div>
-
-            <!-- Total Leakage Delta -->
-            <div class="glass rounded-2xl p-5 relative overflow-hidden group border-l-4 border-l-rose-500 transition-all duration-300">
-                <div class="absolute -right-4 -bottom-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-300">
-                    <i class="fa-solid fa-circle-exclamation text-9xl text-rose-400"></i>
-                </div>
+            <!-- Cumulative Net Sales (Day 1-9) -->
+            <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 flex flex-col justify-between">
                 <div class="flex justify-between items-start">
-                    <h2 class="text-xs text-rose-400 font-bold uppercase tracking-wider">Reconciled Losses</h2>
-                    <span class="text-[10px] bg-rose-500/10 text-rose-400 px-2 py-0.5 rounded font-mono font-bold">Unaccounted Fixed</span>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Accumulated Payout (9 Days)</span>
+                    <span class="px-2 py-0.5 text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-md">9 Sessions</span>
                 </div>
-                <div class="flex items-end gap-1.5 mt-3 text-rose-400">
-                    <span class="text-4xl font-extrabold tracking-tight text-glow-rose">18.13</span>
-                    <span class="text-base font-bold mb-1 font-mono">BND</span>
+                <div class="mt-4">
+                    <span class="text-3xl font-bold text-white">190.66 BND</span>
+                    <p class="text-xs text-slate-500 mt-1">Sum of historical operational cycles</p>
                 </div>
-                <p class="text-[11px] text-slate-400 mt-2">
-                    Fuel/Food: <span class="font-mono text-slate-200">14.00</span> | Mystery Ops Exp: <span class="font-mono text-slate-200">4.13</span>
-                </p>
+            </div>
+
+            <!-- Average Velocity -->
+            <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 flex flex-col justify-between">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Sales Velocity</span>
+                    <span class="px-2 py-0.5 text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-md">Avg/Day</span>
+                </div>
+                <div class="mt-4">
+                    <span class="text-3xl font-bold text-white">21.18 BND</span>
+                    <p class="text-xs text-slate-500 mt-1">Net channel payout run-rate</p>
+                </div>
+            </div>
+
+            <!-- Unaccounted & Expenses Logged -->
+            <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 flex flex-col justify-between">
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Operational Expenses</span>
+                    <span class="px-2 py-0.5 text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-md">To Date</span>
+                </div>
+                <div class="mt-4">
+                    <span class="text-3xl font-bold text-rose-400">53.63 BND</span>
+                    <p class="text-xs text-slate-500 mt-1">Restock, Refuels & Discrepancies</p>
+                </div>
             </div>
         </section>
 
-        <!-- TWO COLUMN DETAILS & OPTIMIZATION SIMULATOR -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- SECTION 2.5: ACTUAL PERFORMANCE & MONTH-END RUN-RATE FORECASTER -->
+        <section class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-6">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div>
+                    <span class="px-2.5 py-1 text-[10px] font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full uppercase tracking-wider">Historical Intelligence</span>
+                    <h2 class="text-lg font-bold text-white mt-1">Run-Rate Forecaster (Day 1 - Day 22)</h2>
+                    <p class="text-xs text-slate-400">Seamless transition of actual recorded ledger sales into month-end scenario projections.</p>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+                    <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
+                        <span class="text-slate-400 block">Actual Net Sales (9 Days)</span>
+                        <span class="text-sm font-bold text-emerald-400 font-mono">190.66 BND</span>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
+                        <span class="text-slate-400 block">Current Operating Pace</span>
+                        <span class="text-sm font-bold text-indigo-400 font-mono">21.18 BND/day</span>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
+                        <span class="text-slate-400 block">Expected Monthly Sales</span>
+                        <span id="forecastSalesEst" class="text-sm font-bold text-white font-mono">465.96 BND</span>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
+                        <span class="text-slate-400 block">EOM Profit Growth</span>
+                        <span id="forecastProfitEst" class="text-sm font-bold text-emerald-400 font-mono">+257.8%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forecasting Graph Panel -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                <div class="lg:col-span-8 h-80 relative">
+                    <canvas id="historicalProjectionChart"></canvas>
+                </div>
+                <div class="lg:col-span-4 bg-slate-900/60 p-5 rounded-lg border border-slate-800 space-y-4 text-xs">
+                    <span class="font-bold text-slate-300 uppercase block tracking-wider text-[10px]">Understanding the Forecast Tracks</span>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-2.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 mt-1"></span>
+                            <div>
+                                <span class="font-semibold text-white block">Actual Ledger Track (Days 1-9)</span>
+                                <p class="text-slate-400 text-[11px]">Calculated directly from confirmed Day 1-9 net payout data totaling 190.66 BND.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <span class="w-2.5 h-0.5 bg-blue-500 mt-1.5 border border-dashed border-blue-400"></span>
+                            <div>
+                                <span class="font-semibold text-white block">Historical Run Path (Base Model)</span>
+                                <p class="text-slate-400 text-[11px]">Projects at the current baseline velocity of 21.18 BND/day, reaching 465.96 BND by Day 22.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <span class="w-2.5 h-0.5 bg-purple-500 mt-1.5 border border-dashed border-purple-400"></span>
+                            <div>
+                                <span class="font-semibold text-white block">Momentum Path (Optimistic Model)</span>
+                                <p class="text-slate-400 text-[11px]">Projects forward using your Day 9 peak rate of 27.16 BND/day, targeting 543.74 BND cumulative sales.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5">
+                            <span class="w-2.5 h-0.5 bg-amber-500 mt-1.5 border border-dashed border-amber-400"></span>
+                            <div>
+                                <span class="font-semibold text-amber-400 block">Custom Simulated Path (Live Control)</span>
+                                <p class="text-slate-400 text-[11px]">Interactive trajectory showing exactly where you will land based on the variables selected in Section 2.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: INTERACTIVE PLANNING & SIMULATION ENGINE -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <!-- Left 2 Cols: Sourcing Optimization & Historical Reconciliation -->
-            <div class="lg:col-span-2 space-y-6">
-                
-                <!-- SARDINE OPTIMIZATION ENGINE -->
-                <section class="glass rounded-2xl p-6 border border-slate-800">
-                    <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
-                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-wand-magic-sparkles text-blue-400"></i>
-                            Sardine Cost & Packaging Optimization Engine
-                        </h3>
-                        <span class="text-xs bg-blue-500/10 text-blue-300 font-bold px-3 py-1 rounded-full border border-blue-500/20">OPERATIONAL OPTIMIZER</span>
+            <!-- Left Panel: Live Controls with Lock Feature -->
+            <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 lg:col-span-1 space-y-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold text-white">Scenario Variables</h2>
+                        <p class="text-xs text-slate-400 mt-1">Tailor factors to calculate precise monthly projections.</p>
+                    </div>
+                </div>
+
+                <!-- Unified Link Engine Switcher -->
+                <div class="p-3.5 bg-slate-900/80 rounded-xl border border-slate-800 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-2.5">
+                        <div class="p-2 bg-indigo-500/10 rounded-lg text-indigo-400 border border-indigo-500/20">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-white block">Link Engine (Lock Mode)</span>
+                            <span class="text-[10px] text-slate-400 block">Locks variables into a proportional unit-scaling model.</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="linkToggle" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-slate-800 rounded-full peer peer-focus:ring-2 peer-focus:ring-indigo-500 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-slate-300 after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500 peer-checked:after:bg-white"></div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <!-- Operating Days Slider -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <label for="opDays" class="text-slate-300 flex items-center gap-1.5">
+                                Operating Days 
+                                <span class="link-lock-indicator text-[10px] text-indigo-400 font-medium px-1.5 py-0.2 bg-indigo-500/10 border border-indigo-500/20 rounded-md">🔗 Linked</span>
+                            </label>
+                            <span id="opDaysVal" class="text-emerald-400 font-mono">22 Days</span>
+                        </div>
+                        <input type="range" id="opDays" min="1" max="31" value="22" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                        <div class="flex justify-between text-[10px] text-slate-500">
+                            <span>1 Day</span>
+                            <span>Standard (22 Days)</span>
+                            <span>Full Month (31 Days)</span>
+                        </div>
                     </div>
 
-                    <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-                        The transition from **Ayam Brand** to **Mr. Ten** coupled with the correct packaging logic (**Benxon 2H containers** instead of **foil trays**) represents a major optimization breakthrough. Calculate and contrast below:
+                    <!-- Daily Channel Net Revenue -->
+                    <div class="space-y-2 relative">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <label for="dailyRev" class="text-slate-300 flex items-center gap-1.5">
+                                Avg. Daily Revenue (BND)
+                                <span class="link-lock-indicator text-[10px] text-indigo-400 font-medium px-1.5 py-0.2 bg-indigo-500/10 border border-indigo-500/20 rounded-md">🔗 Linked</span>
+                            </label>
+                            <span class="text-emerald-400 font-mono">BND <span id="dailyRevVal">21.18</span></span>
+                        </div>
+                        <input type="range" id="dailyRev" min="5" max="50" step="0.5" value="21.18" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                        <div class="flex justify-between text-[10px] text-slate-500">
+                            <span>5.00 BND</span>
+                            <span>Historical Avg (21.18)</span>
+                            <span>Peak (50.00)</span>
+                        </div>
+                    </div>
+
+                    <!-- Blended COGS % -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <label class="text-slate-300 flex items-center gap-1.5">
+                                Blended COGS & Pack Rate
+                                <span id="cogsLockText" class="link-lock-indicator text-[10px] text-indigo-400 font-medium px-1.5 py-0.2 bg-indigo-500/10 border border-indigo-500/20 rounded-md">🔗 Auto-Scale</span>
+                            </label>
+                            <span id="cogsPctVal" class="text-emerald-400 font-mono">40%</span>
+                        </div>
+                        <input type="range" id="cogsPct" min="15" max="65" step="1" value="40" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                        <div class="flex justify-between text-[10px] text-slate-500">
+                            <span>15% (Premium)</span>
+                            <span id="cogsBenchmarkLabel">Linked Efficiency</span>
+                            <span>65% (Low Margin)</span>
+                        </div>
+                    </div>
+
+                    <!-- Indirect/Operational Overhead Costs -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <label for="overhead" class="text-slate-300 flex items-center gap-1.5">
+                                Monthly Overhead & Gas
+                                <span id="overheadLockText" class="link-lock-indicator text-[10px] text-indigo-400 font-medium px-1.5 py-0.2 bg-indigo-500/10 border border-indigo-500/20 rounded-md">🔗 Auto-Scale</span>
+                            </label>
+                            <span class="text-emerald-400 font-mono">BND <span id="overheadVal">45.00</span></span>
+                        </div>
+                        <input type="range" id="overhead" min="0" max="150" step="5" value="45" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                        <div class="flex justify-between text-[10px] text-slate-500">
+                            <span>0.00 BND</span>
+                            <span id="overheadBenchmarkLabel">Linked Allocation</span>
+                            <span>150.00 BND</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proportional Mode Information -->
+                <div id="simulationTipBox" class="p-4 bg-slate-900 border border-indigo-500/20 rounded-lg text-xs space-y-2 text-slate-300 transition-all">
+                    <span class="font-bold text-indigo-400 flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Tied Proportional Rules
+                    </span>
+                    <p class="text-[11px] text-slate-400 leading-relaxed">
+                        Adjusting the <strong class="text-slate-200">Daily Revenue</strong> simulates scaled logistics. At peak revenue (50.00 BND), ingredient sourcing efficiency drops your <strong class="text-emerald-400">Blended COGS down to 28%</strong>. However, more sales volume naturally scales up your <strong class="text-rose-400">Overhead Costs</strong> due to packaging and delivery fuel.
                     </p>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Inputs -->
-                        <div class="space-y-4 bg-slate-900/40 p-4 rounded-xl border border-slate-800">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Sardine Sourcing Option</label>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <button onclick="setSardine('mr_ten', 1.50, 35)" id="btn-ten" class="py-2.5 rounded-lg text-xs font-mono font-bold bg-blue-600 text-white border border-blue-500">
-                                        Mr. Ten (1.50 BND @ 35 yield)
-                                    </button>
-                                    <button onclick="setSardine('ayam_brand', 3.95, 34)" id="btn-ayam" class="py-2.5 rounded-lg text-xs font-mono font-bold bg-slate-850 text-slate-400 border border-slate-700 hover:bg-slate-750">
-                                        Ayam Brand (3.95 BND @ 34 yield)
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Container Packaging Option</label>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <button onclick="setPackaging('benxon', 0.032)" id="btn-benxon" class="py-2.5 rounded-lg text-xs font-mono font-bold bg-blue-600 text-white border border-blue-500">
-                                        Benxon 2H (0.032 BND)
-                                    </button>
-                                    <button onclick="setPackaging('foil_tray', 0.190)" id="btn-foil" class="py-2.5 rounded-lg text-xs font-mono font-bold bg-slate-850 text-slate-400 border border-slate-700 hover:bg-slate-750">
-                                        Foil Tray (0.190 BND)
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Results display -->
-                        <div class="space-y-3 bg-slate-900/60 p-4 rounded-xl border border-blue-950/30 flex flex-col justify-between">
-                            <div class="space-y-2 text-xs">
-                                <div class="flex justify-between">
-                                    <span>Puff Ingredient Cost (Pastry + Meat):</span>
-                                    <span class="font-mono text-slate-200" id="calc-puff-cogs">0.188 BND</span>
-                                </div>
-                                <div class="flex justify-between border-b border-slate-800 pb-2">
-                                    <span>Container Cost (Per unit of 2 puffs):</span>
-                                    <span class="font-mono text-slate-300" id="calc-pack-cost">0.032 BND</span>
-                                </div>
-                                <div class="flex justify-between font-bold text-slate-200">
-                                    <span>Total Container COGS (2 Puffs):</span>
-                                    <span class="font-mono text-blue-400" id="calc-total-cogs">0.408 BND</span>
-                                </div>
-                                <div class="flex justify-between font-bold text-emerald-400 border-t border-slate-850 pt-2">
-                                    <span>Net UKUR Return / Margin %:</span>
-                                    <span class="font-mono" id="calc-net-profit">0.552 BND (83.0%)</span>
-                                </div>
-                            </div>
-                            
-                            <div class="text-[10px] text-amber-400 bg-amber-500/5 border border-amber-500/15 p-2.5 rounded-lg flex items-start gap-2 leading-relaxed">
-                                <i class="fa-solid fa-lightbulb mt-0.5"></i>
-                                <span>Note: Mr. Ten combined with Benxon 2H packaging yields a massive $83.0\%$ profit margin based on the updated cost model.</span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- RECONCILIATION & RE-ENTRY LEDGER -->
-                <section class="glass rounded-2xl p-6">
-                    <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
-                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-scale-balanced text-emerald-400"></i>
-                            Historical Capital Reconciliation Flow
-                        </h3>
-                        <span class="text-xs font-mono text-slate-400">Post-Day 9 verified balance transition</span>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs font-mono">
-                            <thead>
-                                <tr class="text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-800">
-                                    <th class="py-2 px-3">Transaction / Adjustment Milestone</th>
-                                    <th class="py-2 px-3 text-right">Debit / Credit</th>
-                                    <th class="py-2 px-3 text-right text-slate-200">Running Capital</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-800/50">
-                                <tr>
-                                    <td class="py-2.5 px-3 font-semibold text-slate-300">Soft Reset Baseline</td>
-                                    <td class="py-2.5 px-3 text-right text-slate-500">—</td>
-                                    <td class="py-2.5 px-3 text-right text-blue-400 font-bold">55.86 BND</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-2.5 px-3 text-slate-400">Days 1 - 8 Cumulative Net Sales</td>
-                                    <td class="py-2.5 px-3 text-right text-emerald-500">+75.64 BND</td>
-                                    <td class="py-2.5 px-3 text-right">131.50 BND</td>
-                                </tr>
-                                <tr class="bg-blue-950/10">
-                                    <td class="py-2.5 px-3 font-semibold text-slate-200">Day 9 Net Sales (PRMH + UKUR)</td>
-                                    <td class="py-2.5 px-3 text-right text-emerald-500">+27.16 BND</td>
-                                    <td class="py-2.5 px-3 text-right text-white">158.66 BND</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-2.5 px-3 text-slate-400">Restock (June 14-15) - Business Materials</td>
-                                    <td class="py-2.5 px-3 text-right text-rose-500">-34.25 BND</td>
-                                    <td class="py-2.5 px-3 text-right">124.41 BND</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-2.5 px-3 text-slate-400">Restock (June 14-15) - Personal Purchases</td>
-                                    <td class="py-2.5 px-3 text-right text-rose-500">-5.25 BND</td>
-                                    <td class="py-2.5 px-3 text-right">119.16 BND</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-2.5 px-3 text-slate-400">Identified Expenses (Refuels & Ayamku)</td>
-                                    <td class="py-2.5 px-3 text-right text-rose-500">-14.00 BND</td>
-                                    <td class="py-2.5 px-3 text-right">105.16 BND</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-2.5 px-3 text-slate-400">Unaccounted Operational Expenses</td>
-                                    <td class="py-2.5 px-3 text-right text-rose-500">-4.13 BND</td>
-                                    <td class="py-2.5 px-3 text-right">101.03 BND</td>
-                                </tr>
-                                <tr class="border-b border-rose-950">
-                                    <td class="py-2.5 px-3 text-rose-400 font-semibold italic"><i class="fa-solid fa-eraser mr-1"></i> Final Physical Reconciliation Drift</td>
-                                    <td class="py-2.5 px-3 text-right text-rose-500">-10.05 BND</td>
-                                    <td class="py-2.5 px-3 text-right text-rose-400">90.98 BND</td>
-                                </tr>
-                                <tr class="bg-emerald-950/20 text-emerald-400 font-bold text-sm">
-                                    <td class="py-3 px-3"><i class="fa-solid fa-circle-check mr-1.5 text-emerald-400"></i> Verified Ending Capital Position</td>
-                                    <td class="py-3 px-3 text-right">—</td>
-                                    <td class="py-3 px-3 text-right text-glow-emerald text-base">90.98 BND</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
+                </div>
             </div>
 
-            <!-- Right Col: Product Portfolio & Pending Actions -->
-            <div class="space-y-6">
-                
-                <!-- PRODUCT STATUS & MARGIN SNAPSHOTS -->
-                <section class="glass rounded-2xl p-5 border border-slate-800">
-                    <h3 class="text-xs font-bold text-white uppercase tracking-wider mb-3">
-                        Active Produced Products
-                    </h3>
+            <!-- Right Panel: Live Projection Dashboard Output -->
+            <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 lg:col-span-2 flex flex-col justify-between space-y-6">
+                <div>
+                    <h2 class="text-lg font-bold text-white">Projected Monthly Performance</h2>
+                    <p class="text-xs text-slate-400 mt-1">Simulated performance metrics based on parameters selected on the left.</p>
+                </div>
 
-                    <div class="space-y-2 text-xs">
-                        <!-- Produced Tuna -->
-                        <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center">
-                            <div>
-                                <p class="font-bold text-slate-200">Tuna Puffs (2 Puffs/container)</p>
-                                <p class="text-[10px] text-slate-400">COGS: 0.205 BND | Net: 0.96 BND</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-mono font-bold text-emerald-400">62.9%</p>
-                                <span class="text-[9px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded font-bold uppercase">Stable</span>
-                            </div>
-                        </div>
-
-                        <!-- Produced Carbonara -->
-                        <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center">
-                            <div>
-                                <p class="font-bold text-slate-200">Mushroom Carbonara</p>
-                                <p class="text-[10px] text-slate-400">COGS: 0.870 BND | Net: 1.60 BND</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-mono font-bold text-blue-400">36.5%</p>
-                                <span class="text-[9px] bg-blue-500/10 text-blue-400 px-1.5 py-0.5 rounded font-bold uppercase">Prego Std</span>
-                            </div>
-                        </div>
-
-                        <!-- Produced Spaghetti -->
-                        <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center">
-                            <div>
-                                <p class="font-bold text-slate-200">Spaghetti Bolognese</p>
-                                <p class="text-[10px] text-slate-400">COGS: 0.890 BND | Net: 1.60 BND</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-mono font-bold text-rose-400">35.5%</p>
-                                <span class="text-[9px] bg-rose-500/10 text-rose-400 px-1.5 py-0.5 rounded font-bold uppercase">Waste Risk</span>
-                            </div>
-                        </div>
-
-                        <!-- Produced Sambal Mangga -->
-                        <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center">
-                            <div>
-                                <p class="font-bold text-slate-200">Sambal / Jaruk Mangga</p>
-                                <p class="text-[10px] text-slate-400">COGS: 0.00 BND (Home-grown)</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-mono font-bold text-emerald-400">100%</p>
-                                <span class="text-[9px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded font-bold uppercase">High Margin</span>
-                            </div>
-                        </div>
+                <!-- Live Calculations Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <div class="bg-slate-900 p-4 rounded-lg border border-slate-800">
+                        <span class="text-[10px] uppercase font-bold text-slate-500">Projected Net Revenue</span>
+                        <div class="text-xl font-bold text-white mt-1">BND <span id="projRev">0.00</span></div>
                     </div>
-                </section>
-
-                <!-- OPERATIONAL ROADMAP & FLAGS -->
-                <section class="glass rounded-2xl p-5 border border-slate-800">
-                    <h3 class="text-xs font-bold text-white uppercase tracking-wider mb-3">
-                        Operational Flags & Tasks
-                    </h3>
-
-                    <div class="space-y-2.5 text-xs">
-                        <!-- High Priority Item -->
-                        <div class="p-2.5 rounded-lg border border-rose-950 bg-rose-950/10 space-y-1">
-                            <div class="flex justify-between items-center">
-                                <span class="font-bold text-rose-300 uppercase">1. Mr. Ten Yield Session</span>
-                                <span class="text-[9px] bg-rose-500 text-white font-bold px-1.5 py-0.5 rounded">HIGH</span>
-                            </div>
-                            <p class="text-slate-400 text-[11px] leading-relaxed">
-                                Verify if the <span class="font-mono text-white">35 puffs / can</span> yield remains consistent in subsequent production sessions.
-                            </p>
-                        </div>
-
-                        <!-- Medium Priority Item -->
-                        <div class="p-2.5 rounded-lg border border-amber-950 bg-amber-950/10 space-y-1">
-                            <div class="flex justify-between items-center">
-                                <span class="font-bold text-amber-300 uppercase">2. Thursday Throttle</span>
-                                <span class="text-[9px] bg-amber-500 text-slate-900 font-bold px-1.5 py-0.5 rounded">MEDIUM</span>
-                            </div>
-                            <p class="text-slate-400 text-[11px] leading-relaxed">
-                                Maintain strict restricted deployment profiles on Thursdays/Saturdays to protect UKUR leakage.
-                            </p>
-                        </div>
-
-                        <!-- Sourcing Confirmation Flag -->
-                        <div class="p-2.5 rounded-lg border border-blue-950 bg-blue-950/10 space-y-2">
-                            <div class="flex justify-between items-center">
-                                <span class="font-bold text-blue-300 uppercase"><i class="fa-solid fa-flag mr-1"></i> Owner Sourcing Flags</span>
-                                <span class="text-[9px] bg-blue-500 text-white font-bold px-1.5 py-0.5 rounded">FLAGS</span>
-                            </div>
-                            <div class="space-y-1 text-slate-400 text-[11px] font-mono leading-relaxed">
-                                <p><span class="text-blue-300">F2:</span> Fork pack count unverified ($0.90 BND)</p>
-                                <p><span class="text-blue-300">F4:</span> Purpose of 4 Prego cans ($8.76 BND)</p>
-                                <p><span class="text-blue-300">F5:</span> Purpose of Clara Ole 1kg ($3.15 BND)</p>
-                            </div>
-                        </div>
+                    <div class="bg-slate-900 p-4 rounded-lg border border-slate-800">
+                        <span class="text-[10px] uppercase font-bold text-slate-500">Estimated COGS Cost</span>
+                        <div class="text-xl font-bold text-rose-400 mt-1">BND <span id="projCogs">0.00</span></div>
                     </div>
-                </section>
+                    <div class="bg-slate-900 p-4 rounded-lg border border-slate-800">
+                        <span class="text-[10px] uppercase font-bold text-slate-500">Simulated Overhead</span>
+                        <div class="text-xl font-bold text-rose-400 mt-1">BND <span id="projOverhead">0.00</span></div>
+                    </div>
+                    <div class="bg-slate-900 p-4 rounded-lg border border-slate-800">
+                        <span class="text-[10px] uppercase font-bold text-slate-500">Projected Profit Margin</span>
+                        <div class="text-xl font-bold text-emerald-400 mt-1"><span id="projMargin">0.00</span>%</div>
+                    </div>
+                    <div class="bg-slate-900/60 p-4 rounded-lg border border-emerald-500/20 bg-emerald-950/10">
+                        <span class="text-[10px] uppercase font-bold text-emerald-400">Projected Monthly Net Profit</span>
+                        <div class="text-xl font-bold text-emerald-400 mt-1">BND <span id="projProfit">0.00</span></div>
+                    </div>
+                    <div class="bg-slate-900/60 p-4 rounded-lg border border-indigo-500/20 bg-indigo-950/10">
+                        <span class="text-[10px] uppercase font-bold text-indigo-400">Projected Ending Capital</span>
+                        <div class="text-xl font-bold text-indigo-300 mt-1">BND <span id="projCapital">0.00</span></div>
+                    </div>
+                </div>
 
+                <!-- Capital Reinvestment Metric -->
+                <div class="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Simulated Capital Growth Velocity</span>
+                        <p class="text-xs text-slate-300 mt-0.5">By reinvesting your projected net profit back into active operations:</p>
+                    </div>
+                    <div class="text-left sm:text-right">
+                        <span class="text-2xl font-black text-emerald-400" id="capitalGainsPct">0.0%</span>
+                        <p class="text-[10px] text-slate-400">Gain relative to current capital</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: VISUAL INTELLIGENCE & GRAPH CENTER -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Left Chart: Capital Gains Velocity Curve -->
+            <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 lg:col-span-7 space-y-4">
+                <div>
+                    <h3 class="text-lg font-bold text-white">Capital Growth Path</h3>
+                    <p class="text-xs text-slate-400">Visualizing compound capital gains starting from Day 1 to the end of your operational cycle.</p>
+                </div>
+                <div class="h-64 sm:h-80 relative">
+                    <canvas id="capitalGrowthChart"></canvas>
+                </div>
             </div>
 
-        </div>
+            <!-- Right Chart: Monthly Cash Allocation Composition -->
+            <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 lg:col-span-5 space-y-4">
+                <div>
+                    <h3 class="text-lg font-bold text-white">Profit & Expense Composition</h3>
+                    <p class="text-xs text-slate-400">Percentage distribution of COGS, fixed overhead, and net profit allocation.</p>
+                </div>
+                <div class="h-64 sm:h-80 relative flex items-center justify-center">
+                    <canvas id="marginCompositionChart"></canvas>
+                </div>
+            </div>
+        </section>
 
-        <!-- FOOTER & AUDIT SIGNOFF -->
-        <footer class="text-center text-slate-500 text-[11px] border-t border-slate-900 pt-6 space-y-1">
-            <p><strong>KITA-KITA Eats Command Ledger (v4.0 Reconciled)</strong> • Brunei Darussalam</p>
-            <p>AI Agent Continuous Memory Module • Verified Physical Balance: 90.98 BND.</p>
-        </footer>
+        <!-- SECTION 4: SCENARIO GRAPHICAL SPECTRUM -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Table Benchmark Portfolio -->
+            <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 lg:col-span-6 space-y-6">
+                <div>
+                    <h2 class="text-lg font-bold text-white">Benchmarked Projections Spectrum</h2>
+                    <p class="text-xs text-slate-400 mt-1">A direct structural breakdown of established business run-rates against hypothetical targets.</p>
+                </div>
 
-    </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-slate-400 font-semibold bg-slate-900/50">
+                                <th class="p-4">Projected Scenario</th>
+                                <th class="p-4">Daily Basis</th>
+                                <th class="p-4">Active Days</th>
+                                <th class="p-4">Sales Revenue</th>
+                                <th class="p-4 text-rose-400">Total Costs</th>
+                                <th class="p-4 text-emerald-400">Net Profit</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800">
+                            <!-- Standard Average Scenario -->
+                            <tr class="hover:bg-slate-900/40 transition-all">
+                                <td class="p-4 font-semibold text-white flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                                    Steady Historical Run
+                                </td>
+                                <td class="p-4 font-mono text-slate-300">21.18 BND/day</td>
+                                <td class="p-4">22 days</td>
+                                <td class="p-4 font-mono text-white">465.96 BND</td>
+                                <td class="p-4 font-mono text-rose-400">231.38 BND</td>
+                                <td class="p-4 font-mono text-emerald-400 font-bold">234.58 BND</td>
+                            </tr>
+                            <!-- Day 9 Peak Momentum Scenario -->
+                            <tr class="bg-emerald-500/5 hover:bg-emerald-500/10 transition-all">
+                                <td class="p-4 font-semibold text-white flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                    Day 9 Momentum
+                                </td>
+                                <td class="p-4 font-mono text-slate-300">27.16 BND/day</td>
+                                <td class="p-4">22 days</td>
+                                <td class="p-4 font-mono text-white">597.52 BND</td>
+                                <td class="p-4 font-mono text-rose-400">284.01 BND</td>
+                                <td class="p-4 font-mono text-emerald-400 font-bold">313.51 BND</td>
+                            </tr>
+                            <!-- Scaled Max Effort -->
+                            <tr class="hover:bg-slate-900/40 transition-all">
+                                <td class="p-4 font-semibold text-white flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                                    High Capacity Scaling
+                                </td>
+                                <td class="p-4 font-mono text-slate-300">35.00 BND/day</td>
+                                <td class="p-4">26 days</td>
+                                <td class="p-4 font-mono text-white">910.00 BND</td>
+                                <td class="p-4 font-mono text-rose-400">409.00 BND</td>
+                                <td class="p-4 font-mono text-emerald-400 font-bold">501.00 BND</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-    <!-- CALCULATOR ENGINE SCRIPT -->
+            <!-- Graph Scenario Spectrum Chart -->
+            <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 lg:col-span-6 space-y-4">
+                <div>
+                    <h3 class="text-lg font-bold text-white">Scenario Breakdown Spectrum</h3>
+                    <p class="text-xs text-slate-400">Direct graphical comparison of Gross Revenue vs. Outflow Costs vs. Net Take-home Profit.</p>
+                </div>
+                <div class="h-64 sm:h-80 relative">
+                    <canvas id="scenarioComparisonChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: PRODUCT ECONOMIC MATRIX -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <!-- Produced Items -->
+            <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-4">
+                <div>
+                    <h3 class="text-base font-bold text-white">Produced Item Matrix</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Custom handmade inventory. High margins but labor intensive.</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-slate-500">
+                                <th class="pb-2">Product</th>
+                                <th class="pb-2">Price</th>
+                                <th class="pb-2 text-rose-400">COGS</th>
+                                <th class="pb-2 text-emerald-400">Net Profit</th>
+                                <th class="pb-2 text-right">Margin %</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-900">
+                            <tr>
+                                <td class="py-2.5 font-semibold text-white">Sardine Puffs (Mr. Ten)</td>
+                                <td class="py-2.5 font-mono text-slate-300">1.20</td>
+                                <td class="py-2.5 font-mono text-rose-400">0.408</td>
+                                <td class="py-2.5 font-mono text-emerald-400">0.552</td>
+                                <td class="py-2.5 text-emerald-400 text-right font-bold">83.0%</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-semibold text-white">Tuna Puffs</td>
+                                <td class="py-2.5 font-mono text-slate-300">1.20</td>
+                                <td class="py-2.5 font-mono text-rose-400">0.205</td>
+                                <td class="py-2.5 font-mono text-emerald-400">0.755</td>
+                                <td class="py-2.5 text-emerald-400 text-right font-bold">62.9%</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-semibold text-white">Mushroom Carbonara</td>
+                                <td class="py-2.5 font-mono text-slate-300">2.00</td>
+                                <td class="py-2.5 font-mono text-rose-400">0.870</td>
+                                <td class="py-2.5 font-mono text-emerald-400">0.730</td>
+                                <td class="py-2.5 text-emerald-400 text-right font-bold">36.5%</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-semibold text-white">Spaghetti</td>
+                                <td class="py-2.5 font-mono text-slate-300">2.00</td>
+                                <td class="py-2.5 font-mono text-rose-400">0.890</td>
+                                <td class="py-2.5 font-mono text-emerald-400">0.710</td>
+                                <td class="py-2.5 text-emerald-400 text-right font-bold">35.5%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Ready-Made Items -->
+            <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-4">
+                <div>
+                    <h3 class="text-base font-bold text-white">Ready-Made Portfolio</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Repackaged bulk inventory. Reliable shelf consistency.</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-slate-500">
+                                <th class="pb-2">Product</th>
+                                <th class="pb-2">Price</th>
+                                <th class="pb-2 text-rose-400">COGS</th>
+                                <th class="pb-2 text-emerald-400">Net Profit</th>
+                                <th class="pb-2 text-right">Margin %</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-900">
+                            <tr>
+                                <td class="py-2.5 font-semibold text-white">Pau Ayam BBQ</td>
+                                <td class="py-2.5 font-mono text-slate-300">1.20</td>
+                                <td class="py-2.5 font-mono text-rose-400">0.275</td>
+                                <td class="py-2.5 font-mono text-emerald-400">0.685</td>
+                                <td class="py-2.5 text-emerald-400 text-right font-bold">57.1%</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-semibold text-white">Pau Kari Ayam</td>
+                                <td class="py-2.5 font-mono text-slate-300">1.20</td>
+                                <td class="py-2.5 font-mono text-rose-400">0.289</td>
+                                <td class="py-2.5 font-mono text-emerald-400">0.671</td>
+                                <td class="py-2.5 text-emerald-400 text-right font-bold">55.9%</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-semibold text-white">Pau Inti Itam</td>
+                                <td class="py-2.5 font-mono text-slate-300">1.20</td>
+                                <td class="py-2.5 font-mono text-rose-400">0.211</td>
+                                <td class="py-2.5 font-mono text-emerald-400">0.749</td>
+                                <td class="py-2.5 text-emerald-400 text-right font-bold">62.4%</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-semibold text-white">Sambal Mangga</td>
+                                <td class="py-2.5 font-mono text-slate-300">3.00</td>
+                                <td class="py-2.5 font-mono text-rose-400">0.000</td>
+                                <td class="py-2.5 font-mono text-emerald-400">2.400</td>
+                                <td class="py-2.5 text-emerald-400 text-right font-bold">100.0%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Interactive Scripting -->
     <script>
-        let currentSardineCost = 1.50;
-        let currentSardineYield = 35;
-        let currentPackagingCost = 0.032;
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // UI Element Handles
+            const opDaysInput = document.getElementById('opDays');
+            const opDaysValText = document.getElementById('opDaysVal');
+            
+            const dailyRevInput = document.getElementById('dailyRev');
+            const dailyRevValText = document.getElementById('dailyRevVal');
+            
+            const cogsPctInput = document.getElementById('cogsPct');
+            const cogsPctValText = document.getElementById('cogsPctVal');
+            
+            const overheadInput = document.getElementById('overhead');
+            const overheadValText = document.getElementById('overheadVal');
 
-        function setSardine(type, cost, yieldCount) {
-            currentSardineCost = cost;
-            currentSardineYield = yieldCount;
-            
-            document.getElementById('btn-ten').className = type === 'mr_ten' ? 'py-2.5 rounded-lg text-xs font-mono font-bold bg-blue-600 text-white border border-blue-500' : 'py-2.5 rounded-lg text-xs font-mono font-bold bg-slate-850 text-slate-400 border border-slate-700 hover:bg-slate-750';
-            document.getElementById('btn-ayam').className = type === 'ayam_brand' ? 'py-2.5 rounded-lg text-xs font-mono font-bold bg-blue-600 text-white border border-blue-500' : 'py-2.5 rounded-lg text-xs font-mono font-bold bg-slate-850 text-slate-400 border border-slate-700 hover:bg-slate-750';
-            
-            calculateSim();
-        }
+            const linkToggle = document.getElementById('linkToggle');
+            const simulationTipBox = document.getElementById('simulationTipBox');
 
-        function setPackaging(type, cost) {
-            currentPackagingCost = cost;
-            
-            document.getElementById('btn-benxon').className = type === 'benxon' ? 'py-2.5 rounded-lg text-xs font-mono font-bold bg-blue-600 text-white border border-blue-500' : 'py-2.5 rounded-lg text-xs font-mono font-bold bg-slate-850 text-slate-400 border border-slate-700 hover:bg-slate-750';
-            document.getElementById('btn-foil').className = type === 'foil_tray' ? 'py-2.5 rounded-lg text-xs font-mono font-bold bg-blue-600 text-white border border-blue-500' : 'py-2.5 rounded-lg text-xs font-mono font-bold bg-slate-850 text-slate-400 border border-slate-700 hover:bg-slate-750';
-            
-            calculateSim();
-        }
+            // Projection Metric Outputs
+            const projRevText = document.getElementById('projRev');
+            const projCogsText = document.getElementById('projCogs');
+            const projOverheadText = document.getElementById('projOverhead');
+            const projMarginText = document.getElementById('projMargin');
+            const projProfitText = document.getElementById('projProfit');
+            const projCapitalText = document.getElementById('projCapital');
 
-        function calculateSim() {
-            // Pastry sheet cost baseline: 2.90 per pack of 20 puffs -> 0.145 per puff
-            const pastryCostPerPuff = 0.145;
-            
-            // Per puff meat cost
-            const puffMeatCost = currentSardineCost / currentSardineYield;
-            const singlePuffCOGS = pastryCostPerPuff + puffMeatCost;
-            
-            // Pack of 2 puffs COGS
-            const containerCOGS = (singlePuffCOGS * 2) + currentPackagingCost;
-            
-            // Retails per container of 2 is 1.20 BND
-            const grossRetail = 1.20;
-            const netReturnUKUR = grossRetail * 0.80; // 20% commission
-            const netProfit = netReturnUKUR - containerCOGS;
-            
-            // Margin calculated as Net Profit / Net Return
-            const marginPercent = (netProfit / netReturnUKUR) * 100;
+            const forecastSalesEst = document.getElementById('forecastSalesEst');
+            const forecastProfitEst = document.getElementById('forecastProfitEst');
 
-            document.getElementById('calc-puff-cogs').innerText = singlePuffCOGS.toFixed(3) + ' BND';
-            document.getElementById('calc-pack-cost').innerText = currentPackagingCost.toFixed(3) + ' BND';
-            document.getElementById('calc-total-cogs').innerText = containerCOGS.toFixed(3) + ' BND';
-            document.getElementById('calc-net-profit').innerText = netProfit.toFixed(3) + ' BND (' + marginPercent.toFixed(1) + '%)';
-        }
+            const capitalGainsPct = document.getElementById('capitalGainsPct');
 
-        // Initialize simulation values
-        calculateSim();
+            // Fixed Business Capital State values
+            const startingCapital = 55.86;
+            const currentCapital = 90.98;
+
+            // Chart Variables Declarations
+            let capitalGrowthChart;
+            let marginCompositionChart;
+            let scenarioComparisonChart;
+            let historicalProjectionChart;
+
+            // Global Chart Options configuration for dark mode
+            const chartDefaults = {
+                color: '#94a3b8', // slate-400
+                font: {
+                    family: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+                },
+                gridColor: 'rgba(148, 163, 184, 0.08)' // highly muted slate grid
+            };
+
+            function initCharts() {
+                // 0. Historical and Forecast Run-rate Chart
+                const ctx0 = document.getElementById('historicalProjectionChart').getContext('2d');
+                
+                // Day-by-Day Historical Cumulative Net Revenue Data (Days 1-9)
+                const actualsData = [0, 21.56, 50.96, 73.96, 85.76, 108.10, 127.58, 146.26, 163.50, 190.66];
+                
+                // Define the full index for 22 operating days
+                const labels = [];
+                for (let i = 0; i <= 22; i++) labels.push(`Day ${i}`);
+
+                // Generate Forecast Array helper
+                const buildForecastArray = (rate) => {
+                    const arr = Array(9).fill(null);
+                    arr.push(actualsData[9]); // Day 9 actual start point
+                    for (let i = 10; i <= 22; i++) {
+                        const val = actualsData[9] + (rate * (i - 9));
+                        arr.push(parseFloat(val.toFixed(2)));
+                    }
+                    return arr;
+                };
+
+                historicalProjectionChart = new Chart(ctx0, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Actual Ledger Growth',
+                                data: [...actualsData, ...Array(13).fill(null)],
+                                borderColor: '#10b981', // emerald-500
+                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                borderWidth: 3.5,
+                                fill: true,
+                                tension: 0.1
+                            },
+                            {
+                                label: 'Historical Run Pace (+21.18/day)',
+                                data: buildForecastArray(21.18),
+                                borderColor: '#3b82f6', // blue-500
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                fill: false,
+                                tension: 0.1
+                            },
+                            {
+                                label: 'Day 9 Momentum Pace (+27.16/day)',
+                                data: buildForecastArray(27.16),
+                                borderColor: '#a855f7', // purple-500
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                fill: false,
+                                tension: 0.1
+                            },
+                            {
+                                label: 'Your Simulated Path',
+                                data: [], // Updated live during simulation
+                                borderColor: '#f59e0b', // amber-500
+                                borderWidth: 2.5,
+                                borderDash: [3, 3],
+                                fill: false,
+                                tension: 0.1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: { color: chartDefaults.color, boxWidth: 15 }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { color: chartDefaults.gridColor },
+                                ticks: { color: chartDefaults.color }
+                            },
+                            y: {
+                                grid: { color: chartDefaults.gridColor },
+                                ticks: { color: chartDefaults.color }
+                            }
+                        }
+                    }
+                });
+
+                // 1. Capital Growth Chart (Line)
+                const ctx1 = document.getElementById('capitalGrowthChart').getContext('2d');
+                capitalGrowthChart = new Chart(ctx1, {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [
+                            {
+                                label: 'Capital Path (BND)',
+                                data: [],
+                                borderColor: '#10b981', // emerald-500
+                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                borderWidth: 3,
+                                fill: true,
+                                tension: 0.2,
+                                pointBackgroundColor: '#34d399',
+                                pointBorderColor: '#0f766e'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            x: {
+                                grid: { color: chartDefaults.gridColor },
+                                ticks: { color: chartDefaults.color }
+                            },
+                            y: {
+                                grid: { color: chartDefaults.gridColor },
+                                ticks: { color: chartDefaults.color }
+                            }
+                        }
+                    }
+                });
+
+                // 2. Margin Composition Chart (Doughnut)
+                const ctx2 = document.getElementById('marginCompositionChart').getContext('2d');
+                marginCompositionChart = new Chart(ctx2, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['COGS Cost', 'Overhead', 'Take-Home Profit'],
+                        datasets: [
+                            {
+                                data: [40, 10, 50],
+                                backgroundColor: [
+                                    '#f43f5e', // rose-500
+                                    '#f59e0b', // amber-500
+                                    '#10b981'  // emerald-500
+                                ],
+                                borderWidth: 2,
+                                borderColor: '#020617' // slate-950
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: chartDefaults.color }
+                            }
+                        }
+                    }
+                });
+
+                // 3. Scenario Comparison Chart (Bar)
+                const ctx3 = document.getElementById('scenarioComparisonChart').getContext('2d');
+                scenarioComparisonChart = new Chart(ctx3, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Historical Steady', 'Day 9 Momentum', 'Simulated Settings'],
+                        datasets: [
+                            {
+                                label: 'Gross Revenue',
+                                data: [465.96, 597.52, 0],
+                                backgroundColor: 'rgba(59, 130, 246, 0.7)', // blue-500
+                                borderColor: '#3b82f6',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Expenses (COGS+Overhead)',
+                                data: [231.38, 284.01, 0],
+                                backgroundColor: 'rgba(244, 63, 94, 0.7)', // rose-500
+                                borderColor: '#f43f5e',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Net Profit',
+                                data: [234.58, 313.51, 0],
+                                backgroundColor: 'rgba(16, 185, 129, 0.7)', // emerald-500
+                                borderColor: '#10b981',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                grid: { color: chartDefaults.gridColor },
+                                ticks: { color: chartDefaults.color }
+                            },
+                            y: {
+                                grid: { color: chartDefaults.gridColor },
+                                ticks: { color: chartDefaults.color }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: { color: chartDefaults.color }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function processProportionalLogic(triggerSource) {
+                const isLinked = linkToggle.checked;
+                
+                // Read control elements
+                const days = parseInt(opDaysInput.value);
+                const dailyRev = parseFloat(dailyRevInput.value);
+
+                if (isLinked) {
+                    // Update visual lock indications
+                    document.querySelectorAll('.link-lock-indicator').forEach(el => {
+                        el.innerText = '🔒 Locked Link';
+                        el.classList.add('bg-indigo-500/10', 'text-indigo-400', 'border-indigo-500/20');
+                        el.classList.remove('bg-slate-800', 'text-slate-400', 'border-slate-700');
+                    });
+
+                    // Disable inputs that are automatically computed to protect user interaction integrity
+                    cogsPctInput.disabled = true;
+                    overheadInput.disabled = true;
+
+                    // Apply visual styling overlays
+                    cogsPctInput.classList.add('opacity-50', 'cursor-not-allowed');
+                    overheadInput.classList.add('opacity-50', 'cursor-not-allowed');
+                    
+                    document.getElementById('cogsBenchmarkLabel').innerText = "Locked to Revenue";
+                    document.getElementById('overheadBenchmarkLabel').innerText = "Locked to Scale";
+
+                    // Formulate Dynamic Volume COGS % (from 45% at 5.00 BND rev, down to 28% at peak 50.00 BND rev)
+                    const calculatedCogsPct = Math.round(45 - ((dailyRev - 5) / (50 - 5)) * 17);
+                    cogsPctInput.value = calculatedCogsPct;
+
+                    // Formulate Variable Operational Overhead scaling: 
+                    // Base 10 BND + (1.00 BND per operational day for rent/fuels) + (2.7% of monthly revenue)
+                    const grossRev = days * dailyRev;
+                    const calculatedOverhead = Math.round(10 + (days * 1.00) + (grossRev * 0.027));
+                    overheadInput.value = Math.min(calculatedOverhead, 150); // Cap at max slider bounds
+                } else {
+                    // Clear visual lock overlays
+                    document.querySelectorAll('.link-lock-indicator').forEach(el => {
+                        el.innerText = '⚙️ Manual';
+                        el.classList.remove('bg-indigo-500/10', 'text-indigo-400', 'border-indigo-500/20');
+                        el.classList.add('bg-slate-800', 'text-slate-400', 'border-slate-700');
+                    });
+
+                    cogsPctInput.disabled = false;
+                    overheadInput.disabled = false;
+
+                    cogsPctInput.classList.remove('opacity-50', 'cursor-not-allowed');
+                    overheadInput.classList.remove('opacity-50', 'cursor-not-allowed');
+
+                    document.getElementById('cogsBenchmarkLabel').innerText = "40% (Est. Weighted)";
+                    document.getElementById('overheadBenchmarkLabel').innerText = "45.00 BND (Avg)";
+                }
+            }
+
+            function runSimulation(e) {
+                // First process linked scaling triggers if triggered by Days or Revenue
+                if (e && (e.target.id === 'opDays' || e.target.id === 'dailyRev' || e.target.id === 'linkToggle')) {
+                    processProportionalLogic(e.target.id);
+                }
+
+                // Fetch user-defined inputs
+                const days = parseInt(opDaysInput.value);
+                const dailyRev = parseFloat(dailyRevInput.value);
+                const cogsPct = parseFloat(cogsPctInput.value) / 100;
+                const overhead = parseFloat(overheadInput.value);
+
+                // Update input feedback tags
+                opDaysValText.innerText = `${days} Days`;
+                dailyRevValText.innerText = dailyRev.toFixed(2);
+                cogsPctValText.innerText = `${Math.round(cogsPct * 100)}%`;
+                overheadValText.innerText = overhead.toFixed(2);
+
+                // Calculations
+                const monthlyRevenue = days * dailyRev;
+                const monthlyCOGS = monthlyRevenue * cogsPct;
+                const totalCost = monthlyCOGS + overhead;
+                const netProfit = Math.max(0, monthlyRevenue - totalCost);
+                const netProfitMargin = monthlyRevenue > 0 ? (netProfit / monthlyRevenue) * 100 : 0;
+                const endingCapital = currentCapital + netProfit;
+
+                // Projected growth dynamic relative to CURRENT balance
+                const simulatedGrowthPct = (netProfit / currentCapital) * 100;
+
+                // Update text display content
+                projRevText.innerText = monthlyRevenue.toFixed(2);
+                projCogsText.innerText = monthlyCOGS.toFixed(2);
+                projOverheadText.innerText = overhead.toFixed(2);
+                projMarginText.innerText = netProfitMargin.toFixed(1);
+                projProfitText.innerText = netProfit.toFixed(2);
+                projCapitalText.innerText = endingCapital.toFixed(2);
+
+                capitalGainsPct.innerText = `+${simulatedGrowthPct.toFixed(1)}%`;
+
+                // Fixed Forecast Calculation outputs
+                const expectedSales = 190.66 + (21.18 * 13); // 9 actual + 13 projection days
+                const expectedCogs = expectedSales * 0.40;
+                const expectedProfit = expectedSales - expectedCogs - 45.00;
+                const expectedProfitPct = (expectedProfit / currentCapital) * 100;
+
+                forecastSalesEst.innerText = `${expectedSales.toFixed(2)} BND`;
+                forecastProfitEst.innerText = `+${expectedProfitPct.toFixed(1)}%`;
+
+                // Update Dynamic Charts if initialized
+                if (capitalGrowthChart && marginCompositionChart && scenarioComparisonChart && historicalProjectionChart) {
+                    
+                    // Update Chart 0: Live Simulation forecast path
+                    const liveSimForecast = Array(9).fill(null);
+                    const day9Actual = 190.66;
+                    liveSimForecast.push(day9Actual);
+                    for (let i = 10; i <= 22; i++) {
+                        liveSimForecast.push(parseFloat((day9Actual + (dailyRev * (i - 9))).toFixed(2)));
+                    }
+                    historicalProjectionChart.data.datasets[3].data = liveSimForecast;
+                    historicalProjectionChart.update();
+
+                    // Update Chart 1: Capital Growth Curve
+                    const growthLabels = ['Day 0'];
+                    const growthData = [currentCapital];
+                    let cumulativeProfit = 0;
+                    const dailyProfitIncrement = netProfit / days;
+
+                    for (let i = 1; i <= days; i++) {
+                        growthLabels.push(`Day ${i}`);
+                        growthData.push(parseFloat((currentCapital + (dailyProfitIncrement * i)).toFixed(2)));
+                    }
+
+                    capitalGrowthChart.data.labels = growthLabels;
+                    capitalGrowthChart.data.datasets[0].data = growthData;
+                    capitalGrowthChart.update();
+
+                    // Update Chart 2: Margin Doughnut
+                    marginCompositionChart.data.datasets[0].data = [
+                        parseFloat(monthlyCOGS.toFixed(2)),
+                        parseFloat(overhead.toFixed(2)),
+                        parseFloat(netProfit.toFixed(2))
+                    ];
+                    marginCompositionChart.update();
+
+                    // Update Chart 3: Scenario Spectrum Bar
+                    scenarioComparisonChart.data.datasets[0].data[2] = parseFloat(monthlyRevenue.toFixed(2));
+                    scenarioComparisonChart.data.datasets[1].data[2] = parseFloat(totalCost.toFixed(2));
+                    scenarioComparisonChart.data.datasets[2].data[2] = parseFloat(netProfit.toFixed(2));
+                    scenarioComparisonChart.update();
+                }
+            }
+
+            // Bind simulation parameters to active input event listeners
+            opDaysInput.addEventListener('input', runSimulation);
+            dailyRevInput.addEventListener('input', runSimulation);
+            cogsPctInput.addEventListener('input', runSimulation);
+            overheadInput.addEventListener('input', runSimulation);
+            linkToggle.addEventListener('change', (e) => {
+                processProportionalLogic('linkToggle');
+                runSimulation(e);
+            });
+
+            // Execute on startup
+            initCharts();
+            processProportionalLogic('linkToggle');
+            runSimulation();
+        });
     </script>
 </body>
 </html>
